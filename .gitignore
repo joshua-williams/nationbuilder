@@ -1,0 +1,9 @@
+/.buildpath
+/.project
+/.settings
+/bower_components
+/node_modules
+/vendor
+/log
+/public/adminlte
+/public/plugins

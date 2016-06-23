@@ -1,0 +1,17 @@
+{
+  "name": "nationbuilder",
+  "authors": [
+    "Joshua D. Williams"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "AdminLTE": "admin-lte#^2.3.3"
+  }
+}

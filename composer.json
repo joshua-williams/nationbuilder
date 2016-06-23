@@ -1,0 +1,14 @@
+{
+	"name": "joshua-williams/nationbuilder",
+	
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/joshua-williams/jframe.git"
+		}
+	],
+	
+	"require" : {
+		"swfx/jframe": "2.0.3"
+	}
+}
