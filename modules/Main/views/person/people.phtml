@@ -1,0 +1,24 @@
+<template:extend view="template/default.phtml">
+	<block:content>
+		<table class="table table-condensed people">
+			<thead>
+				<th>ID</th> <th>Name</th> <th>Email Address</th>
+			</thead>
+			<?php if($people):?>
+			<tbody>
+				<?php foreach($people as $i):?>
+				<tr>
+					<td><?=$i->id?></td>
+					<td>
+						<a href="/person/<?=$i->id?>">
+							<?=$i->first_name . ' ' . $i->last_name?>
+						</a>
+					</td>
+					<td><?=$i->email?></td>
+				</tr>
+				<?php endforeach;?>
+			</tbody>
+			<?php endif;?>
+		</table>
+	</block:content>	
+</template:extend>

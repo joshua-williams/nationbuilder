@@ -3,6 +3,7 @@
 /.settings
 /bower_components
 /node_modules
+/config/nationbuilder.php
 /vendor
 /log
 /public/adminlte

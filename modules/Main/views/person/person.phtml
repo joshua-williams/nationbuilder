@@ -1,0 +1,9 @@
+<template:extend view="template/default.phtml">
+	<block:content>
+		<h3><?=$person->first_name . ' ' . $person->last_name?> <a href="/person/<?=$person->id?>/save"><i class="fa fa-edit"></i></a></h3>
+		<p>
+			<a href="mailto:<?=$person->email?>"><?=$person->email?></a>
+		</p>
+		
+	</block:content>	
+</template:extend>

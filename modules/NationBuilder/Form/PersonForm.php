@@ -1,0 +1,42 @@
+<?php 
+
+namespace NationBuilder\Form{
+	
+	class PersonForm extends \JFrame\Form{
+		
+		function __construct(){
+			
+			$this->prop('type','div');
+			
+			$this->addFields([
+				['name'=>'id', 'type'=>'hidden'],
+				['name'=>'nation', 'type'=>'hidden'],
+				['name'=>'first_name', 'type'=>'text', 'label'=>'First Name', 'class'=>'form-control', 'parent'=>['class'=>'col-sm-4']],
+				['name'=>'last_name', 'type'=>'text', 'label'=>'Last Name', 'class'=>'form-control', 'parent'=>['class'=>'col-sm-4']],
+				['name'=>'email', 'type'=>'text', 'label'=>'Email Address', 'class'=>'form-control', 'parent'=>['class'=>'col-sm-4']],
+				['name'=>'phone', 'type'=>'text', 'label'=>'Phone', 'class'=>'form-control', 'parent'=>['class'=>'col-sm-4']],
+				[
+					'name'=>'sex', 
+					'type'=>'dropdown', 
+					'label'=>'Gender',
+					'class'=>'form-control',
+					'options'=>[
+						['label'=>'Male', 'value'=>'M'],
+						['label'=>'Female', 'value'=>'F']
+					],
+					'parent'=>['class'=>'col-sm-4']
+				],
+				['type'=>'submit', 'value'=>'Save', 'class'=>'btn btn-primary', 'parent'=>['class'=>'col-sm-12 mt20']]
+			]);
+		}
+		
+		function action(){
+			$model = new \NationBuilder\Model\PersonModel($_POST);
+			$svc = new \NationBuilder\Service\PersonService();
+			$response = ($model->prop('id')) ? $svc->update($model) : $svc->save($model);
+			return $response;
+		}
+	}
+}
+
+?>

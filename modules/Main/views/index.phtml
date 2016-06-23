@@ -1,3 +1,40 @@
 <template:extend view="template/default.phtml">
-	
+	<block:content>
+		<div class='row'>
+			<div class="col-sm-4">
+				<h3>
+					<a href="/people">
+						<i class="fa fa-user"></i> People
+					</a>
+				</h3>
+				<p>
+					<a href="/people">Show All</a> <br>
+					<a href="/person/save">New Person</a>
+				</p>
+			</div>
+			
+			<div class="col-sm-4">
+				<h3>
+					<a href="/events">
+						<i class="fa fa-calendar"></i> Events
+					</a>
+				</h3>
+				<p>
+					<a href="events">Show All</a> <br>
+					<a href="event/save">New Event</a>
+				</p>
+			</div>
+			<div class="col-sm-4">
+				<h3>
+					<a href="/surveys">
+						<i class="fa fa-list-alt"></i> Surveys
+					</a>
+				</h3>
+				<p>
+					<a href="/surveys">Show All</a> <br>
+					<a href="/survey/save">New Survey</a>
+				</p>
+			</div>			
+		</div>
+	</block:content>	
 </template:extend>
