@@ -1,4 +1,10 @@
 <template:extend view="template/default.phtml">
+	<block:scripts>
+		<script type="text/javascript">
+			$('input[type=submit]').parent().append($('<input type="submit" name="submit" value="Delete" class="btn btn-danger pull-right mr10"/>'));
+		</script>
+	</block:scripts>
+	
 	<block:content>
 		<?=$form->render()?>
 	</block:content>	

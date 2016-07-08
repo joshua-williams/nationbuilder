@@ -50,6 +50,17 @@ namespace NationBuilder\Service{
 			if($response->getData('body.code') == 'not_found') return $response->setError('Person not found');
 			return $response->setSuccess('Person has been updated');
 		}
+		
+		public function delete(PersonModel $person){
+			$person = $person->properties(1);
+			if(!$person->id) return $this->response->setError('Person not found');
+			$config = include("config/nationbuilder.php");
+			$config = $config['nations'][$person->nation];
+			$url = "https://{$person->nation}.nationbuilder.com/api/v1/people/{$person->id}/?access_token={$config['token']}";
+			$response = $this->sendRequest($url, false, ['Content-Type: application/json'], 'delete');
+			if($response->getData('header.Status') == '204 No Content') return $response->setSuccess('Person has been deleted.');
+			return $response->setError('Failed to delete person');
+		}
 	}
 }
 

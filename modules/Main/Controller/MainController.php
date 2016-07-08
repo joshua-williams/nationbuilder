@@ -51,6 +51,20 @@ namespace Main\Controller{
 				'form' => $form,
 			]);
 		}
+		
+		public function surveys(){
+			echo $this->view->render('survey/surveys.phtml', [
+				'surveys' => []
+			]);
+		}
+		
+		public function survey(){
+			
+		}
+		
+		public function saveSurvey(){
+			
+		}
 	}
 }
 ?>

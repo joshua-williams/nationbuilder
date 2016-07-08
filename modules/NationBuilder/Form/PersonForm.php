@@ -1,6 +1,7 @@
 <?php 
 
 namespace NationBuilder\Form{
+	use \JFrame\Vars;
 	
 	class PersonForm extends \JFrame\Form{
 		
@@ -26,14 +27,19 @@ namespace NationBuilder\Form{
 					],
 					'parent'=>['class'=>'col-sm-4']
 				],
-				['type'=>'submit', 'value'=>'Save', 'class'=>'btn btn-primary', 'parent'=>['class'=>'col-sm-12 mt20']]
+				['type'=>'submit', 'name'=>'submit', 'value'=>'Save', 'class'=>'btn btn-primary pull-right', 'parent'=>['class'=>'col-sm-12 mt20']]
+					
 			]);
 		}
 		
 		function action(){
 			$model = new \NationBuilder\Model\PersonModel($_POST);
 			$svc = new \NationBuilder\Service\PersonService();
-			$response = ($model->prop('id')) ? $svc->update($model) : $svc->save($model);
+			if(Vars::get('submit') === 'Delete'){
+				$response = $svc->delete($model);
+			}else{
+				$response = ($model->prop('id')) ? $svc->update($model) : $svc->save($model);
+			}
 			return $response;
 		}
 	}
