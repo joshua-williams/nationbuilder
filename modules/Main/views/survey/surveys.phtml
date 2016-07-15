@@ -8,26 +8,15 @@
 				</div>
 			</div>
 			<div class="box-body">
-				<table class="table table-condensed people">
-					<thead>
-						<th>ID</th> <th>Name</th> <th>Email Address</th>
-					</thead>
-					<?php if($surveys):?>
-					<tbody>
-						<?php foreach($survey as $i):?>
-						<tr>
-							<td><?=$i->id?></td>
-							<td>
-								<a href="/person/<?=$i->id?>">
-									<?=$i->first_name . ' ' . $i->last_name?>
-								</a>
-							</td>
-							<td><?=$i->email?></td>
-						</tr>
-						<?php endforeach;?>
-					</tbody>
-					<?php endif;?>
-				</table>
+				<?php if($surveys):?>
+					<ul class="list-group">
+						<?php foreach($surveys as $i):?>
+						<li class="list-group-item">
+							<a href="/survey/<?=$i->id?>"><?=$i->name?></a>
+						</li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif;?>
 			</div>
 		</div>
 	</block:content>	

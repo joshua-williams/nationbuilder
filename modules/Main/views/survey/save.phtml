@@ -1,0 +1,239 @@
+<template:extend view="template/default.phtml">
+	<block:scripts>
+		<script type="text/javascript">
+			var questions = [];
+			var choices = [];
+		
+			function addChoice(){
+				choices.push({
+					id: $('.question-modal [name=id]').val(),
+					name: $('.question-modal [name=name]').val(),
+					feedback: $('.question-modal [name=feedback]').val()
+				});
+				renderChoices();
+				$('.question-modal [name=name], .question-modal [name=feedback]').val('');
+				$('.question-modal [name=name]').focus();
+			}
+
+			function addQuestion(){
+				questions.push({
+					id: $('.question-modal [name=id]').val(),
+					slug: $('.question-modal [name=slug]').val(),
+					prompt: $('.question-modal [name=prompt]').val(),
+					status: $('.question-modal [name=status]').val(),
+					tags: $('.question-modal [name=tags]').val(),
+					type: $('.question-modal [name=type]').val(),
+					choices: choices
+				});
+				choices = [];
+				renderQuestions();
+				$('.question-modal').modal('hide');
+				$('.question-modal [type=text]').val('');
+			}
+			
+			function renderChoices(){
+				var html = '';
+				for(var a=0, i; i=choices[a]; a++){
+					html+="<li data-index='" + a + "' class='list-group-item'>" + i.name + ' <small><i>' + i.feedback + '</i></small> <i class="fa fa-times pull-right" style="color:red"></i></li>';
+				}
+				$('ul.choices').html(html);
+			}
+
+			function renderQuestions(){
+				var html = '';
+				for(var a=0, i; i=questions[a]; a++){
+					html+="<li data-index='" + a + "' class='list-group-item'>" + i.prompt + ' <small><i>' + i.type + '</i></small> <i class="fa fa-times pull-right" style="color:red"></i></li>';
+				}
+				$('ul.questions').html(html)
+			}
+
+			function showHideChoices(){
+				var val = $('.question-modal [name=type]').val();
+				if( val == 'multiple' ){
+					$('.question-modal .row.choices').removeClass('hidden');
+				}else{
+					$('.question-modal .row.choices').addClass('hidden');
+				}
+			}
+
+			function onSurveySubmit(e){
+				$('[name=questions]').val(JSON.stringify(questions));
+			}
+			
+			$(function(e){
+				$('[name=addQuestion]').click(function(e){
+					e.preventDefault();
+					$('.question-modal').modal();
+				});
+				
+				$('a[href=\\#addQuestion]').click(function(e){
+					addChoice();
+					e.preventDefault();
+				});
+				
+				$('ul.choices').on('click', '.fa-times', function(){
+					var index = Number($(this).data('index'));
+					choices.splice(index, 1);
+					renderChoices();
+				});
+				
+				$('.question-modal button.save').click(function(){
+					addQuestion();
+				});
+
+				$('.question-modal [name=type]').change(showHideChoices);
+				$('.question-modal [name=name]').keyup(function(e){
+					if(e.keyCode !== 13) return;
+					addChoice();
+				});
+				$('ul.questions').on('click','.fa-times', function(){
+					var index = Number($(this).data('index'));
+					questions.splice(index, 1);
+					renderQuestions();
+				});
+
+				$('form[name=survey]').submit(onSurveySubmit);
+				
+				showHideChoices();
+				
+			});
+		</script>
+	</block:scripts>
+
+	<block:content>
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Survey</h3>
+			</div>
+			<div class="box-body">
+				<form method="post" action="/" name='survey'>
+					<?=$form->renderHiddenFields()?>
+					<div class="row">
+						<div class="col-sm-6">
+							<label>Slug</label><input type="text" value=""
+								class="form-control" name="slug">
+						</div>
+						<div class="col-sm-6">
+							<label>Status</label>
+							<select value="" class="form-control" name="status">
+								<option value="published">Published</option>
+								<option value="unlisted">Unlisted</option>
+								<option value="hidden">Hidden</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<label>Name</label><input type="text" value="" class="form-control" name="name">
+						</div>
+						<div class="col-sm-6">
+							<label>Title</label><input type="text" value="" class="form-control" name="title">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label>Headline</label>
+							<input type="text" value="" class="form-control" name="headline">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label>Excerpt</label>
+							<textarea value="" class="form-control" name="excerpt"></textarea>
+						</div>
+					</div>
+					
+					<div class="col-sm-12">
+						<label>Questions</label>
+						<ul class="list-group questions"></ul>
+					</div>
+					
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="pull-left mt10">
+								<input type="submit" value="Add Question" class="btn btn-primary" name="addQuestion">
+							</div>
+							<div class="pull-right mt10">
+								<input type="submit" value="Save Survey" class="btn btn-primary">
+							</div>
+						</div>
+					</div>
+				</form>
+				
+				<div class="clearfix"></div>
+
+			</div>
+		</div>
+
+		<div class="modal fade question-modal" tabindex="-1" role="dialog"
+			aria-labelledby="myLargeModalLabel">
+			<div class="modal-dialog modal-md">
+
+				<div class="modal-content">
+					<div class="modal-header">Survey Question</div>
+					<div class="modal-body">
+						<input type="hidden" name="id">
+						<div class="row">
+							<div class="col-sm-12">
+								<label>Prompt</label>
+				  				<?=$questionForm->getField('prompt')->render()?>
+				  			</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<label>Slug</label>
+								<?=$questionForm->getField('slug')->render()?>
+							</div>
+							<div class="col-sm-6">
+								<label>Status</label>
+				  				<?=$questionForm->getField('status')->render()?>
+				  			</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<label>Type</label>
+				  			<?=$questionForm->getField('type')->render()?>
+				  			</div>
+				  			<div class="col-sm-6">
+								<label>Tags</label>
+				  				<?=$questionForm->getField('tags')->render()?>
+				  			</div>
+						</div>
+						<div class="row choices hidden">
+							<div class="col-sm-12">
+								<label>Choices</label>
+								<ul class="list-group choices"></ul>
+							</div>
+						</div>
+
+						<div class="row choices hidden">
+							<div class="col-sm-9">
+								<div class="mt10 mb10">
+									<div style="padding-left: 0px;" class="col-sm-6">
+										<input type="text" name="name" class="form-control"
+											placeholder="Question" />
+									</div>
+									<div class="col-sm-6">
+										<input type="text" name="feedback" class="form-control"
+											placeholder="Feedback">
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<a href="#addQuestion" class="mt10 btn btn-primary"><i
+									class="fa fa-plus"></i> Add Question</a>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button class="save btn btn-primary">Save Question</button>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+	</block:content>
+</template:extend>

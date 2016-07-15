@@ -12,9 +12,11 @@ namespace NationBuilder\Service{
 		
 		protected function sendRequest($url, $payload=false, Array $headers=[], $method=false){
 			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
 			if($payload){
+				$payload = (is_array($payload)) ? http_build_query($payload) : $payload;
 				curl_setopt($ch, CURLOPT_POST, TRUE);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, (is_array($payload) ? http_build_query($payload) : $payload));
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 			}
 			if($headers) curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			if($method == 'put' || $method == 'delete'){

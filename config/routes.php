@@ -7,7 +7,7 @@ return [
 	['uri'=>'person/save', 'controller'=>'MainController', 'callback'=>'savePerson'],
 		
 	['uri'=>'surveys', 'controller'=>'MainController', 'callback'=>'surveys'],
-	['uri'=>'survey/:id', 'controller'=>'MainController', 'callback'=>'survey'],
+	['uri'=>'survey/:id', 'controller'=>'MainController', 'callback'=>'survey', 'validate'=>'[0-9]+'],
 	['uri'=>'survey/:id/save', 'controller'=>'MainController', 'callback'=>'saveSurvey'],
 	['uri'=>'survey/save', 'controller'=>'MainController', 'callback'=>'saveSurvey'],
 	
