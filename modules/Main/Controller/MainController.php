@@ -59,18 +59,72 @@ namespace Main\Controller{
 		public function surveys(){
 			$response = Loader::get('NationBuilder\Service\SurveyService')->getSurveys($this->nation);
 			$surveys = $response->getData('body.results');
-			///die('<xmp>'.print_r($surveys,1));
 			echo $this->view->render('survey/surveys.phtml', [
 				'surveys' => $surveys,
 			]);
 		}
 		
 		public function survey(){
+			/*
+			$svc = new \NationBuilder\Service\PersonService();
+			$csvc = new \NationBuilder\Service\ContactService();
+			$types = $csvc->getTypes($this->nation);			// #3 Question
+			$methods = $csvc->getMethods($this->nation);		// #16 other
+			$statuses = $csvc->getStatuses($this->nation);	// #9 Other
+			die('<xmp>'.print_r($statuses,1));
+			$contact = new \NationBuilder\Model\ContactModel([
+				'type_id' => 3,
+				'method' => 'other',
+				'sender_id' => 2,
+				'recipient_id' => 6,
+				'note' => 'This is an api test contact',
+				
+			]);
+			$response = $svc->saveContact($contact, $this->nation);
+			echo '<xmp>';
+			//print_r($types); 
+			//print_r($methods);
+			//print_r($statuses);
+			print_r($response);
+			exit;
+			/////////////////////////////////////////
+			
+			*/
+			$form = Loader::get('Main\Form\SurveyForm');
+			$form->prop('type', 'div');
+			
 			$surveyId = Vars::get('id');
 			$response = Loader::get('NationBuilder\Service\SurveyService')->getSurvey($surveyId, $this->nation);
 			$survey = $response->getData('body.survey');
+			$form->addField(['name'=>'survey_id', 'type'=>'hidden', 'value'=>$surveyId]);
+			$form->addField(['name'=>'nation', 'type'=>'hidden', 'value'=>$this->nation]);
+			$form->addField(['name'=>'person_id', 'type'=>'hidden', 'value'=> 6]);
+			//die('<xmp>'.print_r($form,1));
+			foreach($survey->questions as $question){
+				$field = [
+					'type' => $this->type2type($question->type),
+					'name' => "question[$question->id]",
+					'label' => $question->prompt,
+					'class' => 'form-control',
+				];
+				if($field['type'] == 'dropdown'){
+					$options = [];
+					//die('<xmp>'.print_r($question,1));
+					foreach($question->choices as $choice){
+						$options[] = [
+							'label' => $choice->name,
+							'value' => $choice->name
+						];
+					}
+					$field['options'] = $options;
+					
+				}
+				$form->addField($field);
+			}
+			$form->addField(['type'=>'submit', 'class'=>'btn btn-primary mt10', 'value'=>'Submit']);
 			echo $this->view->render('survey/survey.phtml', [
-					'survey' => $survey
+				'survey' => $survey,
+				'form' => $form
 			]);
 		}
 		
@@ -84,6 +138,13 @@ namespace Main\Controller{
 				'form' => $form,
 				'questionForm' => $questionForm,
 			]);
+		}
+		
+		private function type2type($type){
+			switch($type){
+				case 'text': case 'yes_no': return 'text'; break;
+				case 'multiple': return 'dropdown'; break;
+			}
 		}
 	}
 }

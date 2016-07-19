@@ -26,6 +26,7 @@ namespace NationBuilder\Service{
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 			curl_setopt($ch, CURLOPT_HEADER, 1);
+			curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
 			$response = curl_exec($ch);
 			$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 			$header = substr($response, 0, $header_size);

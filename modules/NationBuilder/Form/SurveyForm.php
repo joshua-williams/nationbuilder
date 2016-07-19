@@ -33,7 +33,6 @@ namespace NationBuilder\Form{
 			$survey = new \NationBuilder\Model\SurveyModel($_POST);
 			$response = Loader::get('NationBuilder\Service\SurveyService')->save($survey, Vars::getFrom($_POST, 'nation'));
 			return $response;
-			die('<xmp>'.print_r($response,1));
 		}
 	}
 }

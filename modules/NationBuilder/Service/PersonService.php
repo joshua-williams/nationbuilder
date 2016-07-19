@@ -2,6 +2,7 @@
 
 namespace NationBuilder\Service{
 	use \NationBuilder\Model\PersonModel;
+	use \NationBuilder\Model\ContactModel;
 	
 	class PersonService extends NationBuilder{
 		
@@ -60,6 +61,24 @@ namespace NationBuilder\Service{
 			$response = $this->sendRequest($url, false, ['Content-Type: application/json'], 'delete');
 			if($response->getData('header.Status') == '204 No Content') return $response->setSuccess('Person has been deleted.');
 			return $response->setError('Failed to delete person');
+		}
+		
+		public function saveContact(ContactModel $contact, $nation){
+			$contact = $contact->properties(1);
+			$config = include("config/nationbuilder.php");
+			$config = $config['nations'][$nation];
+			$url = "https://{$nation}.nationbuilder.com/api/v1/people/{$contact->recipient_id}/contacts/?access_token={$config['token']}";
+			$payload = [
+				'contact' => [
+					'type_id' => $contact->type_id,
+					'method' => $contact->method,
+					'sender_id' => $contact->sender_id,
+					'recipient_id' => $contact->recipient_id,
+					'note' => $contact->note
+					
+				]
+			];
+			return $this->sendRequest($url, json_encode($payload), ["Content-Type: application/json"]);
 		}
 	}
 }
