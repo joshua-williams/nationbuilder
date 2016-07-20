@@ -6,9 +6,7 @@ Nation Builder Application
 * PHP 5.4+
 * Apache 2.4 - rewrite, mcrypt, curl
 * Composer
-* NodeJS
-* Grunt
-
+* NodeJS 
 
 ## Installation ##
 
@@ -33,12 +31,32 @@ return [
 composer install
 ```
 
-#### Run grunt ####
+#### Install Node modules (Grunt and Bower) ####
+```
+npm install
+```
+
+#### Download front end dependencies ####
+```
+bower install
+```
+
+#### Run grunt to move bower components to public folder ####
 ```
 grunt
 ```
 
-#### Configure Apache virtual host ####
+## Setting Up Webserver ##
+
+#### PHP cli-server ####
+
+The quickest way to run this is with the built in php webserver. From the command line run
+```
+php -S 0.0.0.0:8080 -t /path/to/nationbuilder/application/public
+```
+Update ./config/config.php changing the site_url to "localhost:8080"
+
+#### Apache virtual host ####
 ```
 <VirtualHost *:80>
   ServerName dev.nationbuilder
